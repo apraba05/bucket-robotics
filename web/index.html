@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Telemetry Trust Gate</title>
+<style>
+:root{--bg:#07100e;--panel:#0d1916;--line:#23332e;--text:#ecf6f2;--muted:#8ca39a;--green:#6fffb0;--red:#ff6f70;--amber:#ffc767;--cyan:#62d8ff}*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{margin:0;background:radial-gradient(circle at 50% -20%,#18342b,var(--bg) 42%);color:var(--text);font:14px Inter,ui-sans-serif,system-ui,sans-serif}header{height:66px;display:flex;align-items:center;padding:0 28px;border-bottom:1px solid var(--line);background:#07100ecc;position:sticky;top:0;z-index:3;backdrop-filter:blur(12px)}.mark{width:28px;height:28px;flex:0 0 28px;margin-right:11px;background:var(--green);clip-path:polygon(15% 0,85% 0,100% 50%,85% 100%,15% 100%,0 50%)}h1{font-size:15px;letter-spacing:.02em;margin:0}.live{margin-left:auto;color:var(--green);font:11px monospace;white-space:nowrap}.live:before{content:'';display:inline-block;width:7px;height:7px;background:currentColor;border-radius:50%;margin-right:7px;box-shadow:0 0 10px currentColor}.wrap{max-width:1450px;margin:auto;padding:20px 28px 40px}.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:14px}.panel{min-width:0;background:linear-gradient(145deg,#101e1a,#0b1512);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 40px #0004}.gate{padding:24px;display:grid;grid-template-columns:1fr 220px;align-items:center}.eyebrow{color:var(--green);text-transform:uppercase;letter-spacing:.16em;font:10px monospace}.gate h2{font-size:26px;margin:8px 0}.sub{color:var(--muted);max-width:580px;line-height:1.5}.score{text-align:center;border-left:1px solid var(--line)}.score b{display:block;font:54px/1 monospace;color:var(--green)}.score span{font:11px monospace;color:var(--muted)}.ship{margin-top:11px;display:inline-block;padding:6px 12px;border-radius:20px;background:#153c2b;color:var(--green);font-weight:800}.controls{padding:18px}.controls h3,.section-head h3{font-size:12px;margin:0;text-transform:uppercase;letter-spacing:.1em}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}button{border:1px solid #355046;background:#15241f;color:var(--text);padding:11px 10px;border-radius:7px;cursor:pointer;font-weight:700}button:hover{border-color:var(--green);transform:translateY(-1px)}button.danger{background:#39191a;border-color:#743236;color:#ff9a9a}.slider{grid-column:span 2;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:11px}.slider label{display:flex;justify-content:space-between}.slider input{width:100%;accent-color:var(--green);margin-top:8px}.flow{display:grid;grid-template-columns:1fr 38px 1fr 38px 1fr 38px 1fr;margin:14px 0}.node{min-width:0;padding:16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);min-height:104px}.node.active{box-shadow:inset 0 0 0 1px #4aa879,0 0 20px #36e69118}.node.down{border-color:var(--red)}.node-title{display:flex;justify-content:space-between;gap:6px;font-weight:800}.tag{font:9px monospace;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:3px 6px;white-space:nowrap}.metric{font:25px monospace;margin-top:14px}.node small{color:var(--muted)}.arrow{align-self:center;color:#4b7566;text-align:center;font-size:22px}.grid{display:grid;grid-template-columns:1.55fr .8fr;gap:14px}.section-head{display:flex;justify-content:space-between;align-items:center;padding:15px 16px;border-bottom:1px solid var(--line);color:var(--muted)}.chart{height:120px;padding:12px 16px 4px}.chart svg{width:100%;height:100%;overflow:visible}.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}.stat{min-width:0;padding:12px 16px;border-right:1px solid var(--line)}.stat span{font:10px monospace;color:var(--muted);display:block}.stat b{font:20px monospace}.events{min-height:315px}.event{display:grid;grid-template-columns:75px 1fr 80px 80px 90px;padding:10px 16px;border-bottom:1px solid #192621;align-items:center;font:12px monospace}.event:hover{background:#12231d}.pill{justify-self:start;padding:4px 7px;border-radius:4px;font-size:10px;font-weight:900}.safe{background:#153c2b;color:var(--green)}.anomalous{background:#432022;color:#ff8b8c}.route{color:var(--cyan)}.logs{padding:8px 14px;height:315px;overflow:hidden}.log{font:11px/1.45 monospace;color:#b0c2bb;padding:7px 0;border-bottom:1px solid #17231f}.log time{color:#597267}.log b{color:var(--amber);font-weight:500;margin:0 6px}.reason{margin:14px;padding:12px;border-left:2px solid var(--amber);background:#131e1a;color:#c7d5d0;font-size:12px;line-height:1.5}footer{text-align:center;color:#4e685e;font:10px monospace;margin-top:24px}@media(max-width:900px){header{padding:0 16px}.wrap{padding:16px 14px 32px}.hero,.grid{grid-template-columns:1fr}.gate{grid-template-columns:1fr}.score{border:0;border-top:1px solid var(--line);margin-top:18px;padding-top:18px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:30px}.event{grid-template-columns:60px minmax(0,1fr) 70px}.event>*:nth-child(4),.event>*:nth-child(5){display:none}}@media(max-width:520px){header h1 span{display:none}.live{font-size:9px}.gate{padding:18px}.gate h2{font-size:23px}.buttons{grid-template-columns:1fr}.slider{grid-column:span 1}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:1px solid var(--line)}.event{grid-template-columns:52px minmax(0,1fr);font-size:10px;padding:10px}.event>*:nth-child(3){display:none}.section-head{gap:8px}.section-head>span{font-size:10px}}
+</style>
+</head>
+<body>
+<header><div class="mark"></div><h1>Telemetry Trust Gate <span style="color:#587269">/ robot-arm-07</span></h1><div class="live" id="live">LIVE · 1 EVENT / SEC</div></header>
+<main class="wrap">
+<section class="hero"><div class="panel gate"><div><div class="eyebrow">Release safety decision</div><h2 id="headline">Robot behavior is trusted</h2><div class="sub">Rules inspect every physical signal. Borderline events get a second opinion before the arm is allowed to ship its next motion plan.</div></div><div class="score"><b id="score">97.0</b><span>ROLLING TRUST / 100</span><div class="ship" id="gate">SHIP</div></div></div><div class="panel controls"><h3>Operator controls</h3><div class="buttons"><button class="danger" data-action="inject">⚡ Inject bad burst</button><button data-action="bedrock" id="bedrockBtn">Break Bedrock</button><button data-action="pause" id="pauseBtn">Pause stream</button><button data-action="reset">Reset scenario</button><div class="slider"><label><span>Torque trip threshold</span><b><span id="th">72</span> Nm</b></label><input id="threshold" type="range" min="60" max="90" value="72"></div></div></div></section>
+<section class="flow"><div class="node active"><div class="node-title">Robot arm <span class="tag">PYTHON</span></div><div class="metric" id="rate">1.0 Hz</div><small>position · torque · temp</small></div><div class="arrow">→</div><div class="node active"><div class="node-title">Redis Stream <span class="tag">EVENT BUS</span></div><div class="metric"><span id="total">0</span> <small>events</small></div><small>robot:telemetry · queue <span id="queue">0</span></small></div><div class="arrow">→</div><div class="node active"><div class="node-title">Trust Gate <span class="tag">GO</span></div><div class="metric"><span id="rules">0</span> <small>rule checks</small></div><small>p95-like latency <span id="latency">0</span>ms</small></div><div class="arrow">→</div><div class="node active" id="llmNode"><div class="node-title">LLM Judge <span class="tag">LANGCHAIN · BEDROCK</span></div><div class="metric"><span id="llm">0</span> <small>reviews</small></div><small>cache <span id="hits">0</span> hits / <span id="misses">0</span> misses</small></div></section>
+<section class="grid"><div><div class="panel"><div class="section-head"><h3>Trust score · rolling window</h3><span id="statusText">healthy</span></div><div class="chart"><svg viewBox="0 0 600 100" preserveAspectRatio="none" aria-label="Rolling trust score chart"><defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#6fffb0" stop-opacity=".32"/><stop offset="1" stop-color="#6fffb0" stop-opacity="0"/></linearGradient></defs><path id="area" fill="url(#fill)"/><path id="line" fill="none" stroke="#6fffb0" stroke-width="2" vector-effect="non-scaling-stroke"/><line x1="0" y1="30" x2="600" y2="30" stroke="#ff6f70" stroke-dasharray="4 5" opacity=".5"/></svg></div><div class="stats"><div class="stat"><span>SAFE</span><b id="safe">0</b></div><div class="stat"><span>ANOMALOUS</span><b id="bad">0</b></div><div class="stat"><span>FALLBACKS</span><b id="fallbacks">0</b></div><div class="stat"><span>LAST LATENCY</span><b><span id="lat2">0</span>ms</b></div></div></div><div class="panel events" style="margin-top:14px"><div class="section-head"><h3>Live decision stream</h3><span>newest first</span></div><div id="events"></div></div></div><aside class="panel"><div class="section-head"><h3>Decision trace</h3><span>audit log</span></div><div class="reason"><div class="eyebrow" style="color:var(--amber);margin-bottom:5px">Latest justification</div><span id="reason">All signals nominal.</span></div><div class="logs" id="logs"></div></aside></section>
+<footer>LOCAL SIMULATION · NO CLOUD CREDENTIALS · REDIS + BEDROCK BEHAVIOR MODELED IN-PROCESS</footer>
+</main>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const pad = value => String(value).padStart(2, '0');
+  const clock = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; };
+  const randomBetween = (low, high) => low + Math.random() * (high - low);
+  const randomInt = (low, high) => Math.floor(randomBetween(low, high + 1));
+  const round1 = value => Math.round((value + Number.EPSILON) * 10) / 10;
+  let state;
+
+  function addLog(source, message) {
+    state.logs.unshift({time: clock(), source, message});
+    state.logs = state.logs.slice(0, 14);
+  }
+
+  function reset() {
+    state = {
+      tick: 0, event_id: 0, score: 97.0, threshold: 72, paused: false,
+      burst: 0, bedrock_up: true, events: [], logs: [], history: [],
+      counts: {total: 0, safe: 0, anomalous: 0, rules: 0, llm: 0, cache_hits: 0, cache_misses: 0, fallbacks: 0},
+      queue_depth: 0, last_latency: 0,
+      last_justification: 'All signals are inside the learned operating envelope.'
+    };
+    addLog('system', 'Redis stream robot:telemetry ready; consumer group gate online');
+  }
+
+  function step() {
+    if (state.paused) return render();
+    state.tick += 1;
+    state.event_id += 1;
+    const bad = state.burst > 0;
+    if (bad) state.burst -= 1;
+    const angle = state.tick / 4;
+    const position = round1(48 + 12 * Math.sin(angle) + randomBetween(-1.5, 1.5));
+    const torque = round1(bad ? 86 + randomBetween(-5, 8) : 51 + 6 * Math.sin(angle / 2) + randomBetween(-3, 3));
+    const temp = round1(bad ? 81 + randomBetween(-2, 4) : 43 + 3 * Math.sin(angle / 3) + randomBetween(-1.5, 1.5));
+    const ambiguous = (state.threshold - 14 <= torque && torque <= state.threshold) || (60 <= temp && temp <= 69);
+    const critical = torque > state.threshold || temp > 75;
+    let route = 'rules', verdict = 'safe', cache = null;
+    let latency = randomInt(7, 16);
+    let reason = 'Within torque and thermal thresholds.';
+    if (critical) {
+      verdict = 'anomalous';
+      reason = `Hard rule tripped: ${torque > state.threshold ? 'torque' : 'temperature'} exceeds safe limit.`;
+      state.counts.rules += 1;
+    } else if (ambiguous) {
+      route = 'llm';
+      state.queue_depth = Math.min(8, state.queue_depth + 1);
+      state.counts.llm += 1;
+      cache = state.counts.llm % 3 === 0 ? 'hit' : 'miss';
+      state.counts[cache === 'hit' ? 'cache_hits' : 'cache_misses'] += 1;
+      if (!state.bedrock_up) {
+        route = 'fallback';
+        verdict = torque < state.threshold - 3 ? 'safe' : 'anomalous';
+        latency = randomInt(18, 30);
+        reason = 'Bedrock unavailable; conservative local policy evaluated the event.';
+        state.counts.fallbacks += 1;
+      } else {
+        latency = cache === 'hit' ? randomInt(42, 80) : randomInt(150, 260);
+        verdict = torque < 68 && temp < 66 ? 'safe' : 'anomalous';
+        reason = verdict === 'safe' ? 'Pattern is transient and consistent with controlled acceleration.' : 'Combined load and heat trend indicates unsafe mechanical stress.';
+        addLog('llm', `${verdict.toUpperCase()} · ${reason}`);
+      }
+    } else {
+      state.counts.rules += 1;
+    }
+    const delta = verdict === 'anomalous' ? -22 : 2.2;
+    state.score = Math.max(0, Math.min(100, state.score * .86 + (verdict === 'safe' ? 100 : 0) * .14 + (verdict === 'anomalous' ? delta : 0)));
+    state.last_latency = latency;
+    state.last_justification = reason;
+    state.counts.total += 1;
+    state.counts[verdict] += 1;
+    state.queue_depth = Math.max(0, state.queue_depth - (Math.random() < .8 ? 1 : 0));
+    const event = {id: `evt-${String(state.event_id).padStart(4, '0')}`, position, torque, temp, route, verdict, latency, cache, reason, at: clock()};
+    state.events.unshift(event);
+    state.events = state.events.slice(0, 10);
+    state.history.push(round1(state.score));
+    state.history = state.history.slice(-40);
+    addLog('gate', `${event.id} → ${verdict.toUpperCase()} via ${route} (${latency}ms)`);
+    render();
+  }
+
+  function act(name, body = {}) {
+    if (name === 'inject') { state.burst += 6; addLog('operator', 'Injected 6-event bad telemetry burst'); }
+    else if (name === 'pause') { state.paused = !state.paused; addLog('operator', `Stream ${state.paused ? 'paused' : 'resumed'}`); }
+    else if (name === 'bedrock') { state.bedrock_up = !state.bedrock_up; addLog('system', `Bedrock ${state.bedrock_up ? 'recovered' : 'OUTAGE — local fallback armed'}`); }
+    else if (name === 'threshold') { state.threshold = Math.max(60, Math.min(90, Math.trunc(Number(body.value) || 72))); addLog('operator', `Torque threshold set to ${state.threshold} Nm`); }
+    else if (name === 'reset') reset();
+    render();
+  }
+
+  function chart(history) {
+    if (!history.length) { $('line').setAttribute('d', ''); $('area').setAttribute('d', ''); return; }
+    const points = history.map((value, i) => `${i / Math.max(1, history.length - 1) * 600},${100 - value}`);
+    $('line').setAttribute('d', `M${points.join(' L')}`);
+    $('area').setAttribute('d', `M0,100 L${points.join(' L')} L600,100 Z`);
+  }
+
+  function render() {
+    const red = state.score < 70;
+    $('score').textContent = state.score.toFixed(1);
+    $('score').style.color = red ? 'var(--red)' : 'var(--green)';
+    $('gate').textContent = red ? 'BLOCK' : 'SHIP';
+    $('gate').className = `ship ${red ? 'anomalous' : 'safe'}`;
+    $('headline').textContent = red ? 'Unsafe motion blocked' : 'Robot behavior is trusted';
+    $('statusText').textContent = red ? 'gate closed · recovery evaluating' : 'healthy · gate open';
+    $('live').textContent = state.paused ? 'PAUSED' : 'LIVE · 1 EVENT / SEC';
+    $('live').style.color = state.paused ? 'var(--amber)' : 'var(--green)';
+    $('rate').textContent = state.paused ? '0.0 Hz' : '1.0 Hz';
+    $('total').textContent = state.counts.total;
+    $('safe').textContent = state.counts.safe;
+    $('bad').textContent = state.counts.anomalous;
+    $('rules').textContent = state.counts.rules;
+    $('llm').textContent = state.counts.llm;
+    $('hits').textContent = state.counts.cache_hits;
+    $('misses').textContent = state.counts.cache_misses;
+    $('fallbacks').textContent = state.counts.fallbacks;
+    $('queue').textContent = state.queue_depth;
+    $('latency').textContent = state.last_latency;
+    $('lat2').textContent = state.last_latency;
+    $('reason').textContent = state.last_justification;
+    $('threshold').value = state.threshold;
+    $('th').textContent = state.threshold;
+    $('pauseBtn').textContent = state.paused ? 'Resume stream' : 'Pause stream';
+    $('bedrockBtn').textContent = state.bedrock_up ? 'Break Bedrock' : 'Restore Bedrock';
+    $('llmNode').className = `node ${state.bedrock_up ? 'active' : 'down'}`;
+    $('events').innerHTML = state.events.slice(0, 7).map(event => `<div class="event"><span style="color:#789086">${event.at}</span><span>${event.id} · ${event.torque}Nm · ${event.temp}°C</span><span class="route">${event.route}</span><span>${event.latency}ms</span><span class="pill ${event.verdict}">${event.verdict}</span></div>`).join('');
+    $('logs').innerHTML = state.logs.map(log => `<div class="log"><time>${log.time}</time><b>${log.source.toUpperCase()}</b>${log.message}</div>`).join('');
+    chart(state.history);
+  }
+
+  document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => act(button.dataset.action)));
+  $('threshold').addEventListener('input', event => { $('th').textContent = event.target.value; });
+  $('threshold').addEventListener('change', event => act('threshold', {value: Number(event.target.value)}));
+  reset();
+  render();
+  setInterval(step, 1000);
+})();
+</script>
+</body>
+</html>
